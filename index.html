@@ -29,6 +29,8 @@
           <li><a href="#about" class="nav-link">About</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
           <li><button class="shop-btn">Shop</button></li>
+          <li><button class="cart-btn" id="cartBtn">Cart (<span id="cartCount">0</span>)</button></li>
+          <li><button class="signin-btn" id="signinBtn">Sign In</button></li>
         </ul>
         <div class="hamburger">
           <span></span>
@@ -120,35 +122,49 @@
           <div class="info-block">
             <h3>Contact Us</h3>
             <p>Phone: +63 (2) 1234-5678</p>
-            <p>
-              Email:
-              <a
-                href="/cdn-cgi/l/email-protection"
-                class="__cf_email__"
-                data-cfemail="86eee3eaeae9c6f1e7ede3e7e8e2e4e7ede3a8f6ee"
-                >[email&#160;protected]</a
-              >
-            </p>
+            <p>Email: info@wakeandbake.ph</p>
           </div>
         </div>
 
         <div class="contact-form-container">
           <h2 class="section-title">Get In Touch</h2>
-          <form class="contact-form">
+          <form class="contact-form" id="contactForm">
             <div class="form-group">
-              <input type="text" placeholder="Your Name" required />
+              <input type="text" id="contactName" placeholder="Your Name" required />
             </div>
             <div class="form-group">
-              <input type="email" placeholder="Your Email" required />
+              <input type="email" id="contactEmail" placeholder="Your Email" required />
             </div>
             <div class="form-group">
-              <textarea placeholder="Your Message" rows="5" required></textarea>
+              <textarea id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
             </div>
             <button type="submit" class="submit-btn">Send Message</button>
           </form>
         </div>
       </div>
     </section>
+
+    <!-- Sign In Modal -->
+    <div class="signin-modal" id="signinModal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <button class="close-modal" id="closeSignin">&times;</button>
+        <h2 class="modal-title">Sign In</h2>
+        <p class="modal-subtitle">Enter your email to save your cart and orders</p>
+        
+        <form class="signin-form" id="signinForm">
+          <div class="form-group">
+            <input type="email" id="userEmail" placeholder="Your Email" required />
+          </div>
+          <button type="submit" class="submit-btn">Continue</button>
+        </form>
+        
+        <div class="user-info" id="userInfo" style="display: none;">
+          <p>Signed in as: <strong id="displayEmail"></strong></p>
+          <button class="signout-btn" id="signoutBtn">Sign Out</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Shop Modal/Popup -->
     <div class="shop-modal" id="shopModal">
@@ -180,6 +196,14 @@
               Traditional sourdough with a crispy crust
             </p>
             <p class="product-price">₱250</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select class="size-select">
+                <option value="Small">Small</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -196,6 +220,10 @@
               Flaky, buttery, and perfectly golden
             </p>
             <p class="product-price">₱80</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input type="number" class="quantity-input" value="1" min="1" max="20" />
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -210,6 +238,13 @@
             <h3 class="product-name">French Baguette</h3>
             <p class="product-description">Authentic French-style baguette</p>
             <p class="product-price">₱150</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select class="size-select">
+                <option value="Regular" selected>Regular</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -224,6 +259,10 @@
             <h3 class="product-name">Danish Pastry</h3>
             <p class="product-description">Assorted fruit-filled danish</p>
             <p class="product-price">₱95</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input type="number" class="quantity-input" value="1" min="1" max="20" />
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -238,6 +277,14 @@
             <h3 class="product-name">Chocolate Cake</h3>
             <p class="product-description">Rich, moist chocolate layer cake</p>
             <p class="product-price">₱650</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select class="slices-select">
+                <option value="8 slices">8 slices</option>
+                <option value="12 slices" selected>12 slices</option>
+                <option value="16 slices">16 slices</option>
+              </select>
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -252,6 +299,14 @@
             <h3 class="product-name">Multigrain Bread</h3>
             <p class="product-description">Healthy blend of grains and seeds</p>
             <p class="product-price">₱200</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select class="size-select">
+                <option value="Small">Small</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Large">Large</option>
+              </select>
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -266,6 +321,10 @@
             <h3 class="product-name">Cinnamon Roll</h3>
             <p class="product-description">Soft, gooey, and delicious</p>
             <p class="product-price">₱100</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input type="number" class="quantity-input" value="1" min="1" max="20" />
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
@@ -280,8 +339,42 @@
             <h3 class="product-name">New York Cheesecake</h3>
             <p class="product-description">Creamy classic cheesecake</p>
             <p class="product-price">₱700</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select class="slices-select">
+                <option value="8 slices">8 slices</option>
+                <option value="12 slices" selected>12 slices</option>
+                <option value="16 slices">16 slices</option>
+              </select>
+            </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <button class="close-modal" id="closeCart">&times;</button>
+        <h2 class="modal-title">Your Cart</h2>
+        
+        <div id="cartItems" class="cart-items">
+          <!-- Cart items will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="cart-empty" id="cartEmpty" style="display: none;">
+          <p>Your cart is empty</p>
+          <button class="shop-trigger cta-btn">Start Shopping</button>
+        </div>
+        
+        <div class="cart-summary" id="cartSummary">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">₱0</span>
+          </div>
+          <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
         </div>
       </div>
     </div>
@@ -305,9 +398,7 @@
         <div class="footer-section">
           <h4>Connect</h4>
           <div class="social-links">
-            <a href="#" aria-label="Facebook">Facebook</a>
-            <a href="#" aria-label="Instagram">Instagram</a>
-            <a href="#" aria-label="Twitter">Twitter</a>
+            <a href="https://facebook.com" target="_blank" aria-label="Facebook">Facebook</a>
           </div>
         </div>
       </div>
