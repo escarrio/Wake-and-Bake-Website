@@ -43,12 +43,24 @@ signinForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('userEmail').value;
     
+    // Check if user has existing cart data
+    const existingUserCart = localStorage.getItem(`cart_${email}`);
+    const currentGuestCart = localStorage.getItem('guest_cart');
+    
     // Save user email
     userEmail = email;
     localStorage.setItem('userEmail', email);
     
-    // Save cart to user's account
-    saveCart();
+    // If user has existing cart, load it. Otherwise, migrate guest cart to user account
+    if (existingUserCart) {
+        cart = JSON.parse(existingUserCart);
+    } else if (currentGuestCart && currentGuestCart !== '[]') {
+        // Migrate guest cart to user account
+        cart = JSON.parse(currentGuestCart);
+        localStorage.setItem(`cart_${email}`, JSON.stringify(cart));
+    }
+    
+    updateCartUI();
     
     showToast('Successfully signed in!');
     updateSigninUI();
@@ -59,11 +71,22 @@ signinForm.addEventListener('submit', (e) => {
 
 signoutBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to sign out? Your cart will be saved for next time.')) {
-        saveCart(); // Save cart before signing out
+        // Save current cart to user's account before signing out
+        if (userEmail && cart.length > 0) {
+            localStorage.setItem(`cart_${userEmail}`, JSON.stringify(cart));
+        }
+        
+        // Clear user session but keep cart data saved
+        const currentUserEmail = userEmail;
         userEmail = null;
         localStorage.removeItem('userEmail');
+        
+        // Clear current cart display
+        cart = [];
+        
         updateSigninUI();
-        showToast('Signed out successfully');
+        updateCartUI();
+        showToast(`Signed out successfully. Your cart has been saved to ${currentUserEmail}`);
         signinModal.classList.remove('active');
         document.body.style.overflow = 'auto';
     }
@@ -123,6 +146,13 @@ function addToCart(product) {
     
     saveCart();
     updateCartUI();
+    
+    // Add bounce animation to cart button
+    const cartButton = document.getElementById('cartBtn');
+    cartButton.style.animation = 'none';
+    setTimeout(() => {
+        cartButton.style.animation = 'cartBounce 0.5s ease';
+    }, 10);
 }
 
 function removeFromCart(index) {
@@ -335,8 +365,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 const shopModal = document.getElementById('shopModal');
 const shopButtons = document.querySelectorAll('.shop-btn, .shop-trigger');
-const closeModal = document.querySelector('.close-modal');
-const modalOverlay = document.querySelector('.modal-overlay');
+const shopCloseModal = shopModal.querySelector('.close-modal');
+const shopModalOverlay = shopModal.querySelector('.modal-overlay');
 
 // Open modal
 shopButtons.forEach(button => {
@@ -354,10 +384,10 @@ function closeShopModal() {
 }
 
 // Close modal on close button click
-closeModal.addEventListener('click', closeShopModal);
+shopCloseModal.addEventListener('click', closeShopModal);
 
 // Close modal on overlay click
-modalOverlay.addEventListener('click', closeShopModal);
+shopModalOverlay.addEventListener('click', closeShopModal);
 
 // Close modal on Escape key
 document.addEventListener('keydown', (e) => {
@@ -506,18 +536,31 @@ categoryButtons.forEach(button => {
         
         const selectedCategory = button.getAttribute('data-category');
         
-        productCards.forEach((card, index) => {
-            const cardCategory = card.getAttribute('data-category');
-            
-            if (selectedCategory === 'all' || cardCategory === selectedCategory) {
-                setTimeout(() => {
-                    card.classList.remove('hidden');
-                    card.style.animation = 'fadeIn 0.5s ease forwards';
-                }, index * 50);
-            } else {
-                card.classList.add('hidden');
-            }
+        // First, hide all cards quickly
+        productCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.8) translateY(20px)';
         });
+        
+        // Then show matching cards with staggered animation
+        setTimeout(() => {
+            let visibleIndex = 0;
+            productCards.forEach((card) => {
+                const cardCategory = card.getAttribute('data-category');
+                
+                if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                    setTimeout(() => {
+                        card.classList.remove('hidden');
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1) translateY(0)';
+                        card.style.transition = 'all 0.5s ease';
+                    }, visibleIndex * 100);
+                    visibleIndex++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }, 200);
     });
 });
 
