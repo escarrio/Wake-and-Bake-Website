@@ -4,6 +4,266 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 // ==========================================
+// GLOBAL VARIABLES
+// ==========================================
+let cart = [];
+let userEmail = localStorage.getItem('userEmail') || null;
+const BUSINESS_EMAIL = 'info@wakeandbake.ph'; // Your business email
+
+// ==========================================
+// INITIALIZE APP
+// ==========================================
+function initializeApp() {
+    loadCart();
+    updateCartUI();
+    updateSigninUI();
+}
+
+// ==========================================
+// USER AUTHENTICATION
+// ==========================================
+const signinModal = document.getElementById('signinModal');
+const signinBtn = document.getElementById('signinBtn');
+const closeSignin = document.getElementById('closeSignin');
+const signinForm = document.getElementById('signinForm');
+const userInfo = document.getElementById('userInfo');
+const signoutBtn = document.getElementById('signoutBtn');
+
+signinBtn.addEventListener('click', () => {
+    signinModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+closeSignin.addEventListener('click', () => {
+    signinModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+});
+
+signinForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('userEmail').value;
+    
+    // Save user email
+    userEmail = email;
+    localStorage.setItem('userEmail', email);
+    
+    // Save cart to user's account
+    saveCart();
+    
+    showToast('Successfully signed in!');
+    updateSigninUI();
+    
+    signinModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+});
+
+signoutBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to sign out? Your cart will be saved for next time.')) {
+        saveCart(); // Save cart before signing out
+        userEmail = null;
+        localStorage.removeItem('userEmail');
+        updateSigninUI();
+        showToast('Signed out successfully');
+        signinModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+});
+
+function updateSigninUI() {
+    if (userEmail) {
+        signinBtn.textContent = 'Account';
+        document.getElementById('displayEmail').textContent = userEmail;
+        signinForm.style.display = 'none';
+        userInfo.style.display = 'block';
+    } else {
+        signinBtn.textContent = 'Sign In';
+        signinForm.style.display = 'block';
+        userInfo.style.display = 'none';
+    }
+}
+
+// ==========================================
+// CART MANAGEMENT
+// ==========================================
+function loadCart() {
+    if (userEmail) {
+        const savedCart = localStorage.getItem(`cart_${userEmail}`);
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+        }
+    } else {
+        const guestCart = localStorage.getItem('guest_cart');
+        if (guestCart) {
+            cart = JSON.parse(guestCart);
+        }
+    }
+}
+
+function saveCart() {
+    if (userEmail) {
+        localStorage.setItem(`cart_${userEmail}`, JSON.stringify(cart));
+    } else {
+        localStorage.setItem('guest_cart', JSON.stringify(cart));
+    }
+}
+
+function addToCart(product) {
+    // Check if product already exists in cart
+    const existingIndex = cart.findIndex(item => 
+        item.name === product.name && 
+        item.size === product.size && 
+        item.slices === product.slices
+    );
+    
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += product.quantity;
+    } else {
+        cart.push(product);
+    }
+    
+    saveCart();
+    updateCartUI();
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    saveCart();
+    updateCartUI();
+}
+
+function updateCartQuantity(index, newQuantity) {
+    if (newQuantity <= 0) {
+        removeFromCart(index);
+    } else {
+        cart[index].quantity = newQuantity;
+        saveCart();
+        updateCartUI();
+    }
+}
+
+function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    
+    renderCartItems();
+}
+
+function renderCartItems() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartEmpty = document.getElementById('cartEmpty');
+    const cartSummary = document.getElementById('cartSummary');
+    
+    if (cart.length === 0) {
+        cartItemsContainer.style.display = 'none';
+        cartEmpty.style.display = 'block';
+        cartSummary.style.display = 'none';
+    } else {
+        cartItemsContainer.style.display = 'block';
+        cartEmpty.style.display = 'none';
+        cartSummary.style.display = 'block';
+        
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <div class="cart-item-details">
+                    <h4>${item.name}</h4>
+                    ${item.size ? `<p>Size: ${item.size}</p>` : ''}
+                    ${item.slices ? `<p>Slices: ${item.slices}</p>` : ''}
+                    <p class="cart-item-price">₱${item.price} each</p>
+                </div>
+                <div class="cart-item-controls">
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn" onclick="updateCartQuantity(${index}, ${item.quantity + 1})">+</button>
+                    </div>
+                    <p class="cart-item-total">₱${itemTotal}</p>
+                    <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+        
+        document.getElementById('cartTotal').textContent = `₱${total}`;
+    }
+}
+
+// Make functions global so they can be called from onclick attributes
+window.updateCartQuantity = updateCartQuantity;
+window.removeFromCart = removeFromCart;
+
+// ==========================================
+// CART MODAL
+// ==========================================
+const cartModal = document.getElementById('cartModal');
+const cartBtn = document.getElementById('cartBtn');
+const closeCart = document.getElementById('closeCart');
+
+cartBtn.addEventListener('click', () => {
+    cartModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+closeCart.addEventListener('click', () => {
+    cartModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+});
+
+// ==========================================
+// CHECKOUT
+// ==========================================
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+checkoutBtn.addEventListener('click', () => {
+    if (!userEmail) {
+        alert('Please sign in to proceed with checkout');
+        cartModal.classList.remove('active');
+        signinModal.classList.add('active');
+        return;
+    }
+    
+    if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+    }
+    
+    // Create order summary
+    let orderSummary = `Order from: ${userEmail}\n\n`;
+    let total = 0;
+    
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        orderSummary += `${item.name}\n`;
+        if (item.size) orderSummary += `  Size: ${item.size}\n`;
+        if (item.slices) orderSummary += `  Slices: ${item.slices}\n`;
+        orderSummary += `  Quantity: ${item.quantity}\n`;
+        orderSummary += `  Price: ₱${itemTotal}\n\n`;
+    });
+    
+    orderSummary += `Total: ₱${total}`;
+    
+    console.log('Order placed:', orderSummary);
+    alert(`Thank you for your order!\n\nOrder total: ₱${total}\n\nWe'll contact you at ${userEmail} to confirm your order.`);
+    
+    // Clear cart after checkout
+    cart = [];
+    saveCart();
+    updateCartUI();
+    
+    cartModal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+});
+
+// ==========================================
 // NAVIGATION FUNCTIONALITY
 // ==========================================
 
@@ -83,14 +343,14 @@ shopButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         e.preventDefault();
         shopModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        document.body.style.overflow = 'hidden';
     });
 });
 
 // Close modal function
 function closeShopModal() {
     shopModal.classList.remove('active');
-    document.body.style.overflow = 'auto'; // Re-enable scrolling
+    document.body.style.overflow = 'auto';
 }
 
 // Close modal on close button click
@@ -101,8 +361,18 @@ modalOverlay.addEventListener('click', closeShopModal);
 
 // Close modal on Escape key
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && shopModal.classList.contains('active')) {
-        closeShopModal();
+    if (e.key === 'Escape') {
+        if (shopModal.classList.contains('active')) {
+            closeShopModal();
+        }
+        if (cartModal.classList.contains('active')) {
+            cartModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        if (signinModal.classList.contains('active')) {
+            signinModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
     }
 });
 
@@ -114,36 +384,44 @@ const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 
 addToCartButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent card click event
+        e.stopPropagation();
         
-        // Get product details
         const productCard = this.closest('.product-card');
         const productName = productCard.querySelector('.product-name').textContent;
-        const productPrice = productCard.querySelector('.product-price').textContent;
+        const productPriceText = productCard.querySelector('.product-price').textContent;
+        const productPrice = parseInt(productPriceText.replace('₱', ''));
+        
+        // Get product options
+        const sizeSelect = productCard.querySelector('.size-select');
+        const slicesSelect = productCard.querySelector('.slices-select');
+        const quantityInput = productCard.querySelector('.quantity-input');
+        
+        const product = {
+            name: productName,
+            price: productPrice,
+            size: sizeSelect ? sizeSelect.value : null,
+            slices: slicesSelect ? slicesSelect.value : null,
+            quantity: quantityInput ? parseInt(quantityInput.value) : 1
+        };
+        
+        addToCart(product);
         
         // Visual feedback
         const originalText = this.textContent;
         this.textContent = '✓ Added!';
         this.style.background = '#5cb85c';
         
-        // Reset button after animation
         setTimeout(() => {
             this.textContent = originalText;
             this.style.background = '';
         }, 1500);
         
-        // Here you would typically add the item to a cart array or send to backend
-        // For now, we'll show a console message
-        console.log(`Added to cart: ${productName} - ${productPrice}`);
-        
-        // Optional: Show a toast notification
         showToast(`${productName} added to cart!`);
     });
 });
 
 // Toast notification function
 function showToast(message) {
-    // Check if toast container exists, if not create it
     let toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
@@ -151,20 +429,16 @@ function showToast(message) {
         document.body.appendChild(toastContainer);
     }
     
-    // Create toast element
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
     
-    // Add to container
     toastContainer.appendChild(toast);
     
-    // Trigger animation
     setTimeout(() => {
         toast.classList.add('show');
     }, 10);
     
-    // Remove after 3 seconds
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => {
@@ -227,27 +501,20 @@ const productCards = document.querySelectorAll('.product-card');
 
 categoryButtons.forEach(button => {
     button.addEventListener('click', () => {
-        // Remove active class from all buttons
         categoryButtons.forEach(btn => btn.classList.remove('active'));
-        
-        // Add active class to clicked button
         button.classList.add('active');
         
-        // Get selected category
         const selectedCategory = button.getAttribute('data-category');
         
-        // Filter products with animation
         productCards.forEach((card, index) => {
             const cardCategory = card.getAttribute('data-category');
             
             if (selectedCategory === 'all' || cardCategory === selectedCategory) {
-                // Show card with staggered animation
                 setTimeout(() => {
                     card.classList.remove('hidden');
                     card.style.animation = 'fadeIn 0.5s ease forwards';
                 }, index * 50);
             } else {
-                // Hide card
                 card.classList.add('hidden');
             }
         });
@@ -271,21 +538,26 @@ logoContainer.addEventListener('click', () => {
 // CONTACT FORM HANDLING
 // ==========================================
 
-const contactForm = document.querySelector('.contact-form');
+const contactForm = document.getElementById('contactForm');
 
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    // Get form values
-    const name = contactForm.querySelector('input[type="text"]').value;
-    const email = contactForm.querySelector('input[type="email"]').value;
-    const message = contactForm.querySelector('textarea').value;
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const message = document.getElementById('contactMessage').value;
     
-    // Basic validation
     if (name && email && message) {
-        // Here you would typically send the form data to a server
-        // For now, we'll just show an alert
-        alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
+        // Create mailto link with all information
+        const subject = encodeURIComponent(`Contact Form Message from ${name}`);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+        const mailtoLink = `mailto:${BUSINESS_EMAIL}?subject=${subject}&body=${body}`;
+        
+        // Open email client
+        window.location.href = mailtoLink;
+        
+        // Show success message
+        showToast('Opening your email client...');
         
         // Reset form
         contactForm.reset();
@@ -298,7 +570,6 @@ contactForm.addEventListener('submit', (e) => {
 // SCROLL ANIMATIONS
 // ==========================================
 
-// Intersection Observer for fade-in animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -100px 0px'
@@ -313,7 +584,6 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
 document.querySelectorAll('.about-content, .feature, .info-block').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
@@ -396,14 +666,12 @@ function createRipple(event) {
     button.appendChild(ripple);
 }
 
-// Add ripple effect to all buttons
 document.querySelectorAll('button, .cta-btn').forEach(button => {
     button.style.position = 'relative';
     button.style.overflow = 'hidden';
     button.addEventListener('click', createRipple);
 });
 
-// CSS for ripple effect
 const style = document.createElement('style');
 style.textContent = `
     .ripple {
@@ -442,5 +710,10 @@ window.addEventListener('load', () => {
 
 console.log('%c🍞 Welcome to Wake & Bake! 🥐', 'font-size: 20px; color: #A67446; font-weight: bold;');
 console.log('%cFreshly baked with love ❤️', 'font-size: 14px; color: #6B4E3D;');
+
+// ==========================================
+// INITIALIZE ON LOAD
+// ==========================================
+initializeApp();
 
 }); // End of DOMContentLoaded
