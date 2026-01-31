@@ -885,6 +885,18 @@ h1, h2, h3, h4 {
     font-weight: 700;
     color: var(--color-dark);
     margin-bottom: 1rem;
+    transition: color 0.2s ease;
+}
+
+.product-price.price-change {
+    animation: pricePop 0.4s ease;
+}
+
+@keyframes pricePop {
+    0%   { transform: scale(1);    color: var(--color-dark); }
+    30%  { transform: scale(1.25); color: var(--color-tan);  }
+    60%  { transform: scale(0.95); color: var(--color-dark); }
+    100% { transform: scale(1);    color: var(--color-dark); }
 }
 
 .product-options {
