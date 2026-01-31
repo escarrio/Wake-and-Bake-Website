@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================================
 let cart = [];
 let userEmail = localStorage.getItem('userEmail') || null;
-const BUSINESS_EMAIL = 'info@wakeandbake.ph'; // Your business email
+const BUSINESS_EMAIL = 'wakeandbakerybusiness@gmail.com';
 
 // ==========================================
 // INITIALIZE APP
@@ -43,25 +43,20 @@ signinForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('userEmail').value;
     
-    // Check if user has existing cart data
     const existingUserCart = localStorage.getItem(`cart_${email}`);
     const currentGuestCart = localStorage.getItem('guest_cart');
     
-    // Save user email
     userEmail = email;
     localStorage.setItem('userEmail', email);
     
-    // If user has existing cart, load it. Otherwise, migrate guest cart to user account
     if (existingUserCart) {
         cart = JSON.parse(existingUserCart);
     } else if (currentGuestCart && currentGuestCart !== '[]') {
-        // Migrate guest cart to user account
         cart = JSON.parse(currentGuestCart);
         localStorage.setItem(`cart_${email}`, JSON.stringify(cart));
     }
     
     updateCartUI();
-    
     showToast('Successfully signed in!');
     updateSigninUI();
     
@@ -71,17 +66,13 @@ signinForm.addEventListener('submit', (e) => {
 
 signoutBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to sign out? Your cart will be saved for next time.')) {
-        // Save current cart to user's account before signing out
         if (userEmail && cart.length > 0) {
             localStorage.setItem(`cart_${userEmail}`, JSON.stringify(cart));
         }
         
-        // Clear user session but keep cart data saved
         const currentUserEmail = userEmail;
         userEmail = null;
         localStorage.removeItem('userEmail');
-        
-        // Clear current cart display
         cart = [];
         
         updateSigninUI();
@@ -131,7 +122,6 @@ function saveCart() {
 }
 
 function addToCart(product) {
-    // Check if product already exists in cart
     const existingIndex = cart.findIndex(item => 
         item.name === product.name && 
         item.size === product.size && 
@@ -147,7 +137,6 @@ function addToCart(product) {
     saveCart();
     updateCartUI();
     
-    // Add bounce animation to cart button
     const cartButton = document.getElementById('cartBtn');
     cartButton.style.animation = 'none';
     setTimeout(() => {
@@ -175,7 +164,6 @@ function updateCartUI() {
     const cartCount = document.getElementById('cartCount');
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCount.textContent = totalItems;
-    
     renderCartItems();
 }
 
@@ -226,7 +214,6 @@ function renderCartItems() {
     }
 }
 
-// Make functions global so they can be called from onclick attributes
 window.updateCartQuantity = updateCartQuantity;
 window.removeFromCart = removeFromCart;
 
@@ -252,7 +239,7 @@ closeCart.addEventListener('click', () => {
 // ==========================================
 const checkoutBtn = document.getElementById('checkoutBtn');
 
-checkoutBtn.addEventListener('click', () => {
+checkoutBtn.addEventListener('click', async () => {
     if (!userEmail) {
         alert('Please sign in to proceed with checkout');
         cartModal.classList.remove('active');
@@ -265,39 +252,82 @@ checkoutBtn.addEventListener('click', () => {
         return;
     }
     
-    // Create order summary
+    // Disable checkout button while processing
+    checkoutBtn.textContent = 'Processing...';
+    checkoutBtn.disabled = true;
+    
     let orderSummary = `Order from: ${userEmail}\n\n`;
     let total = 0;
+    let orderItemsHTML = '<ul style="list-style: none; padding: 0;">';
     
     cart.forEach(item => {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
+        
+        // Plain text version for email
         orderSummary += `${item.name}\n`;
         if (item.size) orderSummary += `  Size: ${item.size}\n`;
         if (item.slices) orderSummary += `  Slices: ${item.slices}\n`;
         orderSummary += `  Quantity: ${item.quantity}\n`;
         orderSummary += `  Price: ₱${itemTotal}\n\n`;
+        
+        // HTML version for better email formatting
+        orderItemsHTML += `<li style="margin-bottom: 15px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+            <strong>${item.name}</strong><br>
+            ${item.size ? `Size: ${item.size}<br>` : ''}
+            ${item.slices ? `Slices: ${item.slices}<br>` : ''}
+            Quantity: ${item.quantity}<br>
+            Price: ₱${itemTotal}
+        </li>`;
     });
     
+    orderItemsHTML += '</ul>';
     orderSummary += `Total: ₱${total}`;
     
-    console.log('Order placed:', orderSummary);
-    alert(`Thank you for your order!\n\nOrder total: ₱${total}\n\nWe'll contact you at ${userEmail} to confirm your order.`);
+    // Send order email to business
+    const formData = new FormData();
+    formData.append('access_key', '1e75e30f-eb9a-440d-890f-839a04409a0b');
+    formData.append('subject', `New Order from ${userEmail} - ₱${total}`);
+    formData.append('from_name', 'Wake & Bake Order System');
+    formData.append('email', userEmail);
+    formData.append('message', orderSummary);
+    formData.append('to_email', 'wakeandbakerybusiness@gmail.com');
     
-    // Clear cart after checkout
-    cart = [];
-    saveCart();
-    updateCartUI();
-    
-    cartModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            console.log('Order placed:', orderSummary);
+            alert(`Thank you for your order!\n\nOrder total: ₱${total}\n\nWe'll contact you at ${userEmail} to confirm your order.`);
+            
+            // Clear cart after successful order
+            cart = [];
+            saveCart();
+            updateCartUI();
+            
+            cartModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        } else {
+            throw new Error('Order submission failed');
+        }
+    } catch (error) {
+        console.error('Checkout error:', error);
+        alert('There was an error processing your order. Please try again or contact us directly.');
+    } finally {
+        checkoutBtn.textContent = 'Proceed to Checkout';
+        checkoutBtn.disabled = false;
+    }
 });
 
 // ==========================================
 // NAVIGATION FUNCTIONALITY
 // ==========================================
 
-// Mobile menu toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
@@ -306,7 +336,6 @@ hamburger.addEventListener('click', () => {
     navMenu.classList.toggle('active');
 });
 
-// Close mobile menu when clicking on a nav link
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
         hamburger.classList.remove('active');
@@ -314,7 +343,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-// Active navigation highlighting on scroll
 const sections = document.querySelectorAll('section[id]');
 const navLinks = document.querySelectorAll('.nav-link');
 
@@ -338,12 +366,10 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         
-        // Don't prevent default if it's just "#" (for shop triggers)
         if (href !== '#') {
             e.preventDefault();
             const target = document.querySelector(href);
@@ -368,7 +394,6 @@ const shopButtons = document.querySelectorAll('.shop-btn, .shop-trigger');
 const shopCloseModal = shopModal.querySelector('.close-modal');
 const shopModalOverlay = shopModal.querySelector('.modal-overlay');
 
-// Open modal
 shopButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -377,24 +402,17 @@ shopButtons.forEach(button => {
     });
 });
 
-// Close modal function
 function closeShopModal() {
     shopModal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
-// Close modal on close button click
 shopCloseModal.addEventListener('click', closeShopModal);
-
-// Close modal on overlay click
 shopModalOverlay.addEventListener('click', closeShopModal);
 
-// Close modal on Escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        if (shopModal.classList.contains('active')) {
-            closeShopModal();
-        }
+        if (shopModal.classList.contains('active')) closeShopModal();
         if (cartModal.classList.contains('active')) {
             cartModal.classList.remove('active');
             document.body.style.overflow = 'auto';
@@ -404,6 +422,50 @@ document.addEventListener('keydown', (e) => {
             document.body.style.overflow = 'auto';
         }
     }
+});
+
+// ==========================================
+// DYNAMIC PRICING
+// ==========================================
+
+// Size / Slices select changes → update displayed price
+document.querySelectorAll('.size-select, .slices-select').forEach(select => {
+    select.addEventListener('change', function() {
+        const card = this.closest('.product-card');
+        const priceEl = card.querySelector('.product-price');
+        const priceMap = JSON.parse(this.getAttribute('data-price-map'));
+        const newPrice = priceMap[this.value];
+        priceEl.textContent = '₱' + newPrice;
+        priceEl.setAttribute('data-base-price', newPrice);
+
+        // Animate the price change
+        priceEl.classList.remove('price-change');
+        void priceEl.offsetWidth; // trigger reflow
+        priceEl.classList.add('price-change');
+    });
+});
+
+// Quantity input changes → update displayed price
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('input', function() {
+        // Clamp value
+        let val = parseInt(this.value) || 1;
+        if (val < 1) val = 1;
+        if (val > 20) val = 20;
+        this.value = val;
+
+        const card = this.closest('.product-card');
+        const priceEl = card.querySelector('.product-price');
+        const unitPrice = parseInt(this.getAttribute('data-unit-price'));
+        const newPrice = unitPrice * val;
+        priceEl.textContent = '₱' + newPrice;
+        priceEl.setAttribute('data-base-price', newPrice);
+
+        // Animate the price change
+        priceEl.classList.remove('price-change');
+        void priceEl.offsetWidth;
+        priceEl.classList.add('price-change');
+    });
 });
 
 // ==========================================
@@ -418,25 +480,35 @@ addToCartButtons.forEach(button => {
         
         const productCard = this.closest('.product-card');
         const productName = productCard.querySelector('.product-name').textContent;
-        const productPriceText = productCard.querySelector('.product-price').textContent;
-        const productPrice = parseInt(productPriceText.replace('₱', ''));
+        const productPrice = parseInt(productCard.querySelector('.product-price').getAttribute('data-base-price'));
         
-        // Get product options
         const sizeSelect = productCard.querySelector('.size-select');
         const slicesSelect = productCard.querySelector('.slices-select');
         const quantityInput = productCard.querySelector('.quantity-input');
         
+        // For quantity-based items: price is already unitPrice * qty in displayed price
+        // but we store unitPrice in cart and use qty in cart for actual quantity management.
+        // So for pastries with quantity input, we add unitPrice as the cart price and qty as quantity.
+        let cartPrice, cartQty;
+        if (quantityInput) {
+            cartPrice = parseInt(quantityInput.getAttribute('data-unit-price'));
+            cartQty = parseInt(quantityInput.value) || 1;
+        } else {
+            cartPrice = productPrice;
+            cartQty = 1;
+        }
+
         const product = {
             name: productName,
-            price: productPrice,
+            price: cartPrice,
             size: sizeSelect ? sizeSelect.value : null,
             slices: slicesSelect ? slicesSelect.value : null,
-            quantity: quantityInput ? parseInt(quantityInput.value) : 1
+            quantity: cartQty
         };
         
         addToCart(product);
         
-        // Visual feedback
+        // Visual feedback on button
         const originalText = this.textContent;
         this.textContent = '✓ Added!';
         this.style.background = '#5cb85c';
@@ -536,13 +608,11 @@ categoryButtons.forEach(button => {
         
         const selectedCategory = button.getAttribute('data-category');
         
-        // First, hide all cards quickly
         productCards.forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'scale(0.8) translateY(20px)';
         });
         
-        // Then show matching cards with staggered animation
         setTimeout(() => {
             let visibleIndex = 0;
             productCards.forEach((card) => {
@@ -578,34 +648,58 @@ logoContainer.addEventListener('click', () => {
 });
 
 // ==========================================
-// CONTACT FORM HANDLING
+// CONTACT FORM — Web3Forms
 // ==========================================
 
 const contactForm = document.getElementById('contactForm');
+const submitBtn = contactForm.querySelector('.submit-btn');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const name = document.getElementById('contactName').value;
     const email = document.getElementById('contactEmail').value;
     const message = document.getElementById('contactMessage').value;
     
-    if (name && email && message) {
-        // Create mailto link with all information
-        const subject = encodeURIComponent(`Contact Form Message from ${name}`);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-        const mailtoLink = `mailto:${BUSINESS_EMAIL}?subject=${subject}&body=${body}`;
-        
-        // Open email client
-        window.location.href = mailtoLink;
-        
-        // Show success message
-        showToast('Opening your email client...');
-        
-        // Reset form
-        contactForm.reset();
-    } else {
-        alert('Please fill in all fields.');
+    if (!name || !email || !message) {
+        showToast('Please fill in all fields.');
+        return;
+    }
+
+    // Disable button while sending
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    // Prepare form data for Web3Forms
+    const formData = new FormData();
+    formData.append('access_key', 'a8c86d6e-8f9a-4b7d-9e3c-5a7b8c9d0e1f'); // Replace with your actual Web3Forms access key
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('message', message);
+    formData.append('subject', 'New Contact Form Submission - Wake & Bake');
+    formData.append('from_name', 'Wake & Bake Website');
+    formData.append('to_email', 'wakeandbakerybusiness@gmail.com');
+
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast('Message sent successfully! We will get back to you soon.');
+            contactForm.reset();
+        } else {
+            throw new Error('Form submission failed');
+        }
+    } catch (error) {
+        showToast('Failed to send. Please try again.');
+        console.error('Form submission error:', error);
+    } finally {
+        submitBtn.textContent = 'Send Message';
+        submitBtn.disabled = false;
     }
 });
 
