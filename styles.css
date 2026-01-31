@@ -213,22 +213,58 @@ h1, h2, h3, h4 {
     padding: 0.7rem 1.8rem;
     border-radius: 25px;
     font-weight: 600;
-    transition: var(--transition-normal);
+    transition: all var(--transition-normal);
     box-shadow: var(--shadow-sm);
 }
 
 .shop-btn:hover, .cart-btn:hover, .signin-btn:hover {
     background: var(--color-tan);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: var(--shadow-md);
+    animation: buttonBounce 0.5s ease;
+}
+
+@keyframes buttonBounce {
+    0%, 100% { transform: translateY(-2px) scale(1.05); }
+    50% { transform: translateY(-4px) scale(1.08); }
 }
 
 .cart-btn {
     background: var(--color-tan);
+    position: relative;
 }
 
 .cart-btn:hover {
     background: var(--color-dark);
+}
+
+#cartCount {
+    display: inline-block;
+    animation: cartCountPulse 2s ease-in-out infinite;
+}
+
+@keyframes cartCountPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes cartBounce {
+    0%, 100% {
+        transform: translateY(-2px) scale(1.05);
+    }
+    25% {
+        transform: translateY(-8px) scale(1.15);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.08);
+    }
+    75% {
+        transform: translateY(-6px) scale(1.12);
+    }
 }
 
 .signin-btn {
@@ -375,15 +411,39 @@ h1, h2, h3, h4 {
     border-radius: 30px;
     font-size: 1.1rem;
     font-weight: 600;
-    transition: var(--transition-normal);
+    transition: all var(--transition-normal);
     box-shadow: var(--shadow-md);
     animation: fadeInUp 1s ease 0.6s backwards;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.cta-btn:hover::before {
+    width: 400px;
+    height: 400px;
 }
 
 .cta-btn:hover {
     background: var(--color-tan);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 40px rgba(166, 116, 70, 0.3);
+}
+
+.cta-btn:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
 .hero-image-placeholder {
@@ -448,18 +508,25 @@ h1, h2, h3, h4 {
     padding: 1.5rem;
     background: var(--color-lightest);
     border-radius: 15px;
-    transition: var(--transition-normal);
+    transition: all var(--transition-normal);
+    cursor: pointer;
 }
 
 .feature:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: var(--shadow-lg);
+    background: var(--color-light);
 }
 
 .feature h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--color-dark);
+    transition: color var(--transition-fast);
+}
+
+.feature:hover h3 {
+    color: var(--color-tan);
 }
 
 .feature p {
@@ -524,7 +591,7 @@ h1, h2, h3, h4 {
     border-radius: 10px;
     font-family: inherit;
     font-size: 1rem;
-    transition: var(--transition-fast);
+    transition: all var(--transition-normal);
     background: var(--color-lightest);
 }
 
@@ -533,6 +600,8 @@ h1, h2, h3, h4 {
     outline: none;
     border-color: var(--color-dark);
     background: var(--color-white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(166, 116, 70, 0.15);
 }
 
 .submit-btn {
@@ -572,6 +641,10 @@ h1, h2, h3, h4 {
     opacity: 1;
 }
 
+.signin-modal.active .modal-content {
+    animation: modalSlideIn 0.4s ease;
+}
+
 .signin-form {
     display: flex;
     flex-direction: column;
@@ -582,6 +655,7 @@ h1, h2, h3, h4 {
     text-align: center;
     color: var(--color-text-light);
     margin-bottom: 2rem;
+    animation: fadeInUp 0.5s ease 0.2s backwards;
 }
 
 .user-info {
@@ -589,6 +663,7 @@ h1, h2, h3, h4 {
     padding: 2rem;
     background: var(--color-lightest);
     border-radius: 15px;
+    animation: fadeInUp 0.5s ease;
 }
 
 .user-info p {
@@ -639,6 +714,16 @@ h1, h2, h3, h4 {
     height: 100%;
     background: rgba(44, 24, 16, 0.7);
     backdrop-filter: blur(5px);
+    animation: fadeInOverlay 0.3s ease;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-content {
@@ -679,13 +764,15 @@ h1, h2, h3, h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition-fast);
+    transition: all var(--transition-fast);
+    cursor: pointer;
 }
 
 .close-modal:hover {
     background: var(--color-dark);
     color: var(--color-white);
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: var(--shadow-md);
 }
 
 .modal-title {
@@ -727,12 +814,13 @@ h1, h2, h3, h4 {
     background: var(--color-lightest);
     border-radius: 15px;
     padding: 1.5rem;
-    transition: var(--transition-normal);
-    animation: fadeIn 0.5s ease;
+    transition: all var(--transition-normal);
+    animation: fadeInScale 0.5s ease;
+    transform-origin: center;
 }
 
 .product-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.02);
     box-shadow: var(--shadow-lg);
 }
 
@@ -743,6 +831,17 @@ h1, h2, h3, h4 {
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.9); }
     to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInScale {
+    from { 
+        opacity: 0; 
+        transform: scale(0.8) translateY(20px);
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+    }
 }
 
 .product-image-placeholder {
@@ -762,6 +861,11 @@ h1, h2, h3, h4 {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image-placeholder img {
+    transform: scale(1.1);
 }
 
 .product-name {
@@ -802,12 +906,19 @@ h1, h2, h3, h4 {
     font-family: inherit;
     font-size: 1rem;
     background: var(--color-white);
-    transition: var(--transition-fast);
+    transition: all var(--transition-normal);
+    cursor: pointer;
 }
 
 .size-select:focus, .slices-select:focus, .quantity-input:focus {
     outline: none;
     border-color: var(--color-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(166, 116, 70, 0.12);
+}
+
+.size-select:hover, .slices-select:hover, .quantity-input:hover {
+    border-color: var(--color-tan);
 }
 
 .add-to-cart-btn {
@@ -818,10 +929,30 @@ h1, h2, h3, h4 {
     border-radius: 25px;
     font-weight: 600;
     font-size: 1rem;
-    transition: var(--transition-normal);
+    transition: all var(--transition-normal);
     box-shadow: var(--shadow-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.add-to-cart-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.add-to-cart-btn:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .add-to-cart-btn:hover {
@@ -870,7 +1001,18 @@ h1, h2, h3, h4 {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    animation: fadeIn 0.3s ease;
+    animation: slideInFromLeft 0.4s ease;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .cart-item-details h4 {
@@ -980,14 +1122,38 @@ h1, h2, h3, h4 {
     border-radius: 25px;
     font-weight: 600;
     font-size: 1.1rem;
-    transition: var(--transition-normal);
+    transition: all var(--transition-normal);
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.checkout-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.checkout-btn:hover::after {
+    width: 400px;
+    height: 400px;
 }
 
 .checkout-btn:hover {
     background: var(--color-tan);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(166, 116, 70, 0.25);
+}
+
+.checkout-btn:active {
+    transform: translateY(-1px) scale(1);
 }
 
 /* ==========================================
