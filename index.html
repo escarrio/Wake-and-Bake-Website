@@ -48,7 +48,7 @@
     <section id="home" class="hero">
       <div class="hero-background">
         <img
-          src="https://aestheticwallpapers.io/wallpaper/953693.png"
+          src="https://png.pngtree.com/thumb_back/fw800/background/20230518/pngtree-bakery-case-full-of-pastries-and-breads-image_2523139.jpg"
           alt="Bakery background"
           class="hero-bg-image"
         />
@@ -211,35 +211,238 @@
         </div>
 
         <div class="products-grid">
-          <!-- Product 1 -->
+          <!-- BREAD PRODUCTS -->
+
+          <!-- Pandesal -->
           <div class="product-card" data-category="bread">
             <div class="product-image-placeholder">
               <img
-                src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=500&h=500&fit=crop"
-                alt="Sourdough Bread"
+                src="http://4.bp.blogspot.com/-whPDwZ-iSow/VGk7R3Lh2vI/AAAAAAAAAPk/A3a2aU1bURQ/s1600/pandesal.jpg"
+                alt="Pandesal"
               />
             </div>
-            <h3 class="product-name">Classic Sourdough</h3>
+            <h3 class="product-name">Pandesal</h3>
             <p class="product-description">
-              Traditional sourdough with a crispy crust
+              Filipino bread roll, soft and lightly sweet
             </p>
-            <p class="product-price" data-base-price="250">₱250</p>
+            <p class="product-price" data-base-price="6">₱6</p>
+            <div class="product-options">
+              <label>Flavor:</label>
+              <select
+                class="flavor-select"
+                data-price-map='{"Regular":6,"Ube":9,"Cheese":12}'
+              >
+                <option value="Regular" selected>Regular - ₱6</option>
+                <option value="Ube">Ube - ₱9</option>
+                <option value="Cheese">Cheese - ₱12</option>
+              </select>
+            </div>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Monay -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://i1.wp.com/bakingwithnessa.com/wp-content/uploads/2023/03/IMG_8029-1.jpg?resize=2048%2C787&ssl=1"
+                alt="Monay"
+              />
+            </div>
+            <h3 class="product-name">Monay</h3>
+            <p class="product-description">
+              Traditional Filipino round bread with butter topping
+            </p>
+            <p class="product-price" data-base-price="8">₱8</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+                data-unit-price="8"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Pan de Coco -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.kawalingpinoy.com/wp-content/uploads/2018/04/filipino-pan-de-coco-6-683x1024.jpg"
+                alt="Pan de Coco"
+              />
+            </div>
+            <h3 class="product-name">Pan de Coco</h3>
+            <p class="product-description">
+              Sweet bread filled with shredded coconut
+            </p>
+            <p class="product-price" data-base-price="10">₱10</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+                data-unit-price="10"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Cheese Bomb -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://poulef.com/wp-content/uploads/2025/04/Filipino-Cheese-Bread-2.webp"
+                alt="Cheese Bomb"
+              />
+            </div>
+            <h3 class="product-name">Cheese Bomb</h3>
+            <p class="product-description">
+              Soft bun filled with creamy cheese
+            </p>
+            <p class="product-price" data-base-price="25">₱25</p>
             <div class="product-options">
               <label>Size:</label>
               <select
                 class="size-select"
-                data-price-map='{"Small":200,"Medium":250,"Large":320}'
+                data-price-map='{"Small":25,"Medium":40}'
               >
-                <option value="Small">Small - ₱200</option>
-                <option value="Medium" selected>Medium - ₱250</option>
-                <option value="Large">Large - ₱320</option>
+                <option value="Small" selected>Small - ₱25</option>
+                <option value="Medium">Medium - ₱40</option>
               </select>
             </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
-          <!-- Product 2 -->
-          <div class="product-card" data-category="pastries">
+          <!-- Sliced Bread -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://foodal.com/wp-content/uploads/2023/06/How-to-Use-the-Whole-Loaf-of-Bread-Including-the-Ends-FB.jpg"
+                alt="Sliced Bread"
+              />
+            </div>
+            <h3 class="product-name">Sliced Bread</h3>
+            <p class="product-description">
+              Fresh whole loaf, perfect for sandwiches
+            </p>
+            <p class="product-price" data-base-price="10">₱10</p>
+            <div class="product-options">
+              <label>Type:</label>
+              <select
+                class="flavor-select"
+                data-price-map='{"Regular":10,"Wheat":15}'
+              >
+                <option value="Regular" selected>Regular - ₱10</option>
+                <option value="Wheat">Wheat - ₱15</option>
+              </select>
+            </div>
+            <div class="product-options">
+              <label>Slices:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="60"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Spanish Bread -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://i.ytimg.com/vi/6f87KcpdsdQ/maxresdefault.jpg"
+                alt="Spanish Bread"
+              />
+            </div>
+            <h3 class="product-name">Spanish Bread</h3>
+            <p class="product-description">
+              Rolled bread with buttery bread crumb filling
+            </p>
+            <p class="product-price" data-base-price="12">₱12</p>
+            <div class="product-options">
+              <label>Flavor:</label>
+              <select
+                class="flavor-select"
+                data-price-map='{"Regular":12,"Cheese":14,"Ube":14,"Chocolate":15}'
+              >
+                <option value="Regular" selected>Regular - ₱12</option>
+                <option value="Cheese">Cheese - ₱14</option>
+                <option value="Ube">Ube - ₱14</option>
+                <option value="Chocolate">Chocolate - ₱15</option>
+              </select>
+            </div>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Empanada -->
+          <div class="product-card" data-category="bread">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.manilaspoon.com/wp-content/uploads/2021/09/Empanada1-1.jpg"
+                alt="Empanada"
+              />
+            </div>
+            <h3 class="product-name">Empanada</h3>
+            <p class="product-description">
+              Savory pastry with various fillings
+            </p>
+            <p class="product-price" data-base-price="25">₱25</p>
+            <div class="product-options">
+              <label>Flavor:</label>
+              <select
+                class="flavor-select"
+                data-price-map='{"Meat":25,"Chicken":27,"Veg":30}'
+              >
+                <option value="Meat" selected>Meat - ₱25</option>
+                <option value="Chicken">Chicken - ₱27</option>
+                <option value="Veg">Vegetable - ₱30</option>
+              </select>
+            </div>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Butter Croissant -->
+          <div class="product-card" data-category="bread">
             <div class="product-image-placeholder">
               <img
                 src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500&h=500&fit=crop&crop=entropy"
@@ -247,59 +450,71 @@
               />
             </div>
             <h3 class="product-name">Butter Croissant</h3>
-            <p class="product-description">
-              Flaky, buttery, and perfectly golden
-            </p>
-            <p class="product-price" data-base-price="80">₱80</p>
-            <div class="product-options">
-              <label>Quantity:</label>
-              <input
-                type="number"
-                class="quantity-input"
-                value="1"
-                min="1"
-                max="20"
-                data-unit-price="80"
-              />
-            </div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-
-          <!-- Product 3 -->
-          <div class="product-card" data-category="bread">
-            <div class="product-image-placeholder">
-              <img
-                src="https://images.unsplash.com/photo-1534620808146-d33bb39128b2?w=500&h=500&fit=crop"
-                alt="French Baguette"
-              />
-            </div>
-            <h3 class="product-name">French Baguette</h3>
-            <p class="product-description">Authentic French-style baguette</p>
-            <p class="product-price" data-base-price="150">₱150</p>
+            <p class="product-description">Flaky, buttery French pastry</p>
+            <p class="product-price" data-base-price="35">₱35</p>
             <div class="product-options">
               <label>Size:</label>
               <select
                 class="size-select"
-                data-price-map='{"Regular":150,"Large":220}'
+                data-price-map='{"Small":35,"Medium":45}'
               >
-                <option value="Regular" selected>Regular - ₱150</option>
-                <option value="Large">Large - ₱220</option>
+                <option value="Small" selected>Small - ₱35</option>
+                <option value="Medium">Medium - ₱45</option>
               </select>
             </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
-          <!-- Product 4 -->
+          <!-- PASTRIES / SWEET BAKES -->
+
+          <!-- Ensaymada -->
           <div class="product-card" data-category="pastries">
             <div class="product-image-placeholder">
               <img
-                src="https://sweettreatsrecipes.com/wp-content/uploads/2025/01/Perfect-Danish-Pastry-Recipe-0-819x1024.webp"
-                alt="Danish Pastry"
+                src="https://i.ytimg.com/vi/98m0eM0_y1w/maxresdefault.jpg"
+                alt="Ensaymada"
               />
             </div>
-            <h3 class="product-name">Danish Pastry</h3>
-            <p class="product-description">Assorted fruit-filled danish</p>
-            <p class="product-price" data-base-price="95">₱95</p>
+            <h3 class="product-name">Ensaymada</h3>
+            <p class="product-description">
+              Sweet, buttery brioche topped with cheese
+            </p>
+            <p class="product-price" data-base-price="40">₱40</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select
+                class="size-select"
+                data-price-map='{"Small":40,"Medium":60}'
+              >
+                <option value="Small" selected>Small - ₱40</option>
+                <option value="Medium">Medium - ₱60</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Mamon -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://i.pinimg.com/originals/84/06/f2/8406f2865e49527acddb399e4df9b81b.jpg"
+                alt="Mamon"
+              />
+            </div>
+            <h3 class="product-name">Mamon</h3>
+            <p class="product-description">Light and fluffy sponge cake</p>
+            <p class="product-price" data-base-price="25">₱25</p>
+            <div class="product-options">
+              <label>Flavor:</label>
+              <select
+                class="flavor-select"
+                data-price-map='{"Plain":25,"Cheese":28,"Ube":30}'
+              >
+                <option value="Plain" selected>Plain - ₱25</option>
+                <option value="Cheese">Cheese - ₱28</option>
+                <option value="Ube">Ube - ₱30</option>
+              </select>
+            </div>
             <div class="product-options">
               <label>Quantity:</label>
               <input
@@ -307,14 +522,174 @@
                 class="quantity-input"
                 value="1"
                 min="1"
-                max="20"
-                data-unit-price="95"
+                max="50"
               />
             </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
-          <!-- Product 5 -->
+          <!-- Egg Pie -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.kawalingpinoy.com/wp-content/uploads/2019/03/mini-egg-pies-3.jpg"
+                alt="Egg Pie"
+              />
+            </div>
+            <h3 class="product-name">Egg Pie</h3>
+            <p class="product-description">
+              Creamy custard pie with flaky crust
+            </p>
+            <p class="product-price" data-base-price="35">₱35</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select
+                class="size-select"
+                data-price-map='{"Small":35,"Medium":50,"Large":60}'
+              >
+                <option value="Small" selected>Small - ₱35</option>
+                <option value="Medium">Medium - ₱50</option>
+                <option value="Large">Large - ₱60</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Buko Pie -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.foxyfolksy.com/wp-content/uploads/2022/12/recipe-of-buko-pie-640x960.jpg"
+                alt="Buko Pie"
+              />
+            </div>
+            <h3 class="product-name">Buko Pie</h3>
+            <p class="product-description">
+              Young coconut pie with buttery crust
+            </p>
+            <p class="product-price" data-base-price="80">₱80</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select
+                class="size-select"
+                data-price-map='{"Small":80,"Medium":100,"Large":120}'
+              >
+                <option value="Small" selected>Small - ₱80</option>
+                <option value="Medium">Medium - ₱100</option>
+                <option value="Large">Large - ₱120</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Hopia -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://i.ytimg.com/vi/7fzbAbjzv5Y/maxresdefault.jpg"
+                alt="Hopia"
+              />
+            </div>
+            <h3 class="product-name">Hopia</h3>
+            <p class="product-description">
+              Flaky pastry with sweet bean filling
+            </p>
+            <p class="product-price" data-base-price="30">₱30</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select
+                class="size-select"
+                data-price-map='{"Small":30,"Medium":45}'
+              >
+                <option value="Small" selected>Small - ₱30</option>
+                <option value="Medium">Medium - ₱45</option>
+              </select>
+            </div>
+            <div class="product-options">
+              <label>Flavor:</label>
+              <select class="flavor-select">
+                <option value="Monggo" selected>Monggo</option>
+                <option value="Ube">Ube</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Cheese Roll -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.nicolerecipe.com/wp-content/uploads/2025/10/q3e50nfkjxfxce0sh8id.webp"
+                alt="Cheese Roll"
+              />
+            </div>
+            <h3 class="product-name">Cheese Roll</h3>
+            <p class="product-description">Sweet roll with cheese filling</p>
+            <p class="product-price" data-base-price="25">₱25</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Choco Roll -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://2.bp.blogspot.com/-3-GESaTfwEE/WA0-oNzCmBI/AAAAAAAAAII/rU03KIL-UMgFOa_8jcOXiiZdKVKjVucfgCLcB/s1600/FullSizeRender%2B7.jpg"
+                alt="Choco Roll"
+              />
+            </div>
+            <h3 class="product-name">Choco Roll</h3>
+            <p class="product-description">Chocolate-filled sweet roll</p>
+            <p class="product-price" data-base-price="25">₱25</p>
+            <div class="product-options">
+              <label>Quantity:</label>
+              <input
+                type="number"
+                class="quantity-input"
+                value="1"
+                min="1"
+                max="50"
+              />
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Cinnamon Roll -->
+          <div class="product-card" data-category="pastries">
+            <div class="product-image-placeholder">
+              <img
+                src="https://cdn.pixabay.com/photo/2022/11/10/17/08/cinnamon-rolls-7583282_1280.jpg"
+                alt="Cinnamon Roll"
+              />
+            </div>
+            <h3 class="product-name">Cinnamon Roll</h3>
+            <p class="product-description">Soft, gooey cinnamon spiral</p>
+            <p class="product-price" data-base-price="40">₱40</p>
+            <div class="product-options">
+              <label>Size:</label>
+              <select
+                class="size-select"
+                data-price-map='{"Small":40,"Medium":50}'
+              >
+                <option value="Small" selected>Small - ₱40</option>
+                <option value="Medium">Medium - ₱50</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- CAKES -->
+
+          <!-- Chocolate Cake -->
           <div class="product-card" data-category="cakes">
             <div class="product-image-placeholder">
               <img
@@ -324,91 +699,155 @@
             </div>
             <h3 class="product-name">Chocolate Cake</h3>
             <p class="product-description">Rich, moist chocolate layer cake</p>
-            <p class="product-price" data-base-price="650">₱650</p>
+            <p class="product-price" data-base-price="70">₱70</p>
             <div class="product-options">
               <label>Slices:</label>
               <select
                 class="slices-select"
-                data-price-map='{"8 slices":500,"12 slices":650,"16 slices":850}'
+                data-price-map='{"2 slices":70,"6 slices":210,"8 slices":280,"10 slices":350,"Whole":450}'
               >
-                <option value="8 slices">8 slices - ₱500</option>
-                <option value="12 slices" selected>12 slices - ₱650</option>
-                <option value="16 slices">16 slices - ₱850</option>
+                <option value="2 slices" selected>2 slices - ₱70</option>
+                <option value="6 slices">6 slices - ₱210</option>
+                <option value="8 slices">8 slices - ₱280</option>
+                <option value="10 slices">10 slices - ₱350</option>
+                <option value="Whole">Whole - ₱450-500</option>
               </select>
             </div>
             <button class="add-to-cart-btn">Add to Cart</button>
           </div>
 
-          <!-- Product 6 -->
-          <div class="product-card" data-category="bread">
-            <div class="product-image-placeholder">
-              <img
-                src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=500&h=500&fit=crop"
-                alt="Multigrain Bread"
-              />
-            </div>
-            <h3 class="product-name">Multigrain Bread</h3>
-            <p class="product-description">Healthy blend of grains and seeds</p>
-            <p class="product-price" data-base-price="200">₱200</p>
-            <div class="product-options">
-              <label>Size:</label>
-              <select
-                class="size-select"
-                data-price-map='{"Small":160,"Medium":200,"Large":260}'
-              >
-                <option value="Small">Small - ₱160</option>
-                <option value="Medium" selected>Medium - ₱200</option>
-                <option value="Large">Large - ₱260</option>
-              </select>
-            </div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-
-          <!-- Product 7 -->
-          <div class="product-card" data-category="pastries">
-            <div class="product-image-placeholder">
-              <img
-                src="https://cdn.pixabay.com/photo/2022/11/10/17/08/cinnamon-rolls-7583282_1280.jpg"
-                alt="Cinnamon Roll"
-              />
-            </div>
-            <h3 class="product-name">Cinnamon Roll</h3>
-            <p class="product-description">Soft, gooey, and delicious</p>
-            <p class="product-price" data-base-price="90">₱90</p>
-            <div class="product-options">
-              <label>Quantity:</label>
-              <input
-                type="number"
-                class="quantity-input"
-                value="1"
-                min="1"
-                max="20"
-                data-unit-price="90"
-              />
-            </div>
-            <button class="add-to-cart-btn">Add to Cart</button>
-          </div>
-
-          <!-- Product 8 -->
+          <!-- Mango Cake -->
           <div class="product-card" data-category="cakes">
             <div class="product-image-placeholder">
               <img
-                src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500&h=500&fit=crop"
-                alt="Cheesecake"
+                src="https://i.pinimg.com/originals/51/22/78/512278bf79cabd59aa8f28a5fdc80679.jpg"
+                alt="Mango Cake"
               />
             </div>
-            <h3 class="product-name">New York Cheesecake</h3>
-            <p class="product-description">Creamy classic cheesecake</p>
-            <p class="product-price" data-base-price="700">₱700</p>
+            <h3 class="product-name">Mango Cake</h3>
+            <p class="product-description">Light sponge with fresh mango</p>
+            <p class="product-price" data-base-price="70">₱70</p>
             <div class="product-options">
               <label>Slices:</label>
               <select
                 class="slices-select"
-                data-price-map='{"8 slices":550,"12 slices":700,"16 slices":900}'
+                data-price-map='{"2 slices":70,"6 slices":220,"8 slices":290,"10 slices":360,"Whole":500}'
               >
-                <option value="8 slices">8 slices - ₱550</option>
-                <option value="12 slices" selected>12 slices - ₱700</option>
-                <option value="16 slices">16 slices - ₱900</option>
+                <option value="2 slices" selected>2 slices - ₱70</option>
+                <option value="6 slices">6 slices - ₱220</option>
+                <option value="8 slices">8 slices - ₱290</option>
+                <option value="10 slices">10 slices - ₱360</option>
+                <option value="Whole">Whole - ₱500-550</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Ube Cake -->
+          <div class="product-card" data-category="cakes">
+            <div class="product-image-placeholder">
+              <img
+                src="https://3.bp.blogspot.com/-dzta5IBhApc/UKr5CJYVj6I/AAAAAAAADUA/SCVnlDSkoKE/s1600/IMG_1437.JPG"
+                alt="Ube Cake"
+              />
+            </div>
+            <h3 class="product-name">Ube Cake</h3>
+            <p class="product-description">Purple yam flavored cake</p>
+            <p class="product-price" data-base-price="70">₱70</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select
+                class="slices-select"
+                data-price-map='{"2 slices":70,"6 slices":220,"8 slices":290,"10 slices":360,"Whole":500}'
+              >
+                <option value="2 slices" selected>2 slices - ₱70</option>
+                <option value="6 slices">6 slices - ₱220</option>
+                <option value="8 slices">8 slices - ₱290</option>
+                <option value="10 slices">10 slices - ₱360</option>
+                <option value="Whole">Whole - ₱500-550</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Banana Cake -->
+          <div class="product-card" data-category="cakes">
+            <div class="product-image-placeholder">
+              <img
+                src="https://i1.wp.com/www.allrecipes.com/thmb/kU5_wRjlF_5Ozm_9EUnnEN6o7IY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/9293326-a-number-1-banana-cake-Charice-Lecointe-1x1-1-49bc9e4417a14a7ea5ff5f45e6671878.jpg?strip=all"
+                alt="Banana Cake"
+              />
+            </div>
+            <h3 class="product-name">Banana Cake</h3>
+            <p class="product-description">Moist banana cake with walnuts</p>
+            <p class="product-price" data-base-price="70">₱70</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select
+                class="slices-select"
+                data-price-map='{"2 slices":70,"6 slices":180,"8 slices":240,"10 slices":300,"Whole":400}'
+              >
+                <option value="2 slices" selected>2 slices - ₱70</option>
+                <option value="6 slices">6 slices - ₱180</option>
+                <option value="8 slices">8 slices - ₱240</option>
+                <option value="10 slices">10 slices - ₱300</option>
+                <option value="Whole">Whole - ₱400-450</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Red Velvet Cake -->
+          <div class="product-card" data-category="cakes">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.mob.co.uk/cdn-cgi/image/width=3840,quality=75,format=auto/https://files.mob-cdn.co.uk/recipes/2024/10/Red-Velvet-Cake.jpg"
+                alt="Red Velvet Cake"
+              />
+            </div>
+            <h3 class="product-name">Red Velvet Cake</h3>
+            <p class="product-description">
+              Classic red velvet with cream cheese frosting
+            </p>
+            <p class="product-price" data-base-price="70">₱70</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select
+                class="slices-select"
+                data-price-map='{"2 slices":70,"6 slices":220,"8 slices":290,"10 slices":360,"Whole":500}'
+              >
+                <option value="2 slices" selected>2 slices - ₱70</option>
+                <option value="6 slices">6 slices - ₱220</option>
+                <option value="8 slices">8 slices - ₱290</option>
+                <option value="10 slices">10 slices - ₱360</option>
+                <option value="Whole">Whole - ₱500-550</option>
+              </select>
+            </div>
+            <button class="add-to-cart-btn">Add to Cart</button>
+          </div>
+
+          <!-- Cheesecake -->
+          <div class="product-card" data-category="cakes">
+            <div class="product-image-placeholder">
+              <img
+                src="https://www.allrecipes.com/thmb/jBAjBzZCHM8ISEy4ZZvg3zTWYz8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/276069homemade-cheesecakeKim4x3-eb1f8032a2e54eff99bc1ad0f9d3a8d4.jpg"
+                alt="Cheesecake"
+              />
+            </div>
+            <h3 class="product-name">Cheesecake</h3>
+            <p class="product-description">Creamy classic cheesecake</p>
+            <p class="product-price" data-base-price="90">₱90</p>
+            <div class="product-options">
+              <label>Slices:</label>
+              <select
+                class="slices-select"
+                data-price-map='{"2 slices":90,"6 slices":280,"8 slices":360,"10 slices":450,"Whole":600}'
+              >
+                <option value="2 slices" selected>2 slices - ₱90</option>
+                <option value="6 slices">6 slices - ₱280</option>
+                <option value="8 slices">8 slices - ₱360</option>
+                <option value="10 slices">10 slices - ₱450</option>
+                <option value="Whole">Whole - ₱600-650</option>
               </select>
             </div>
             <button class="add-to-cart-btn">Add to Cart</button>
