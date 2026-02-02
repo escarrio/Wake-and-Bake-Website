@@ -910,7 +910,7 @@ h1, h2, h3, h4 {
     margin-bottom: 0.5rem;
 }
 
-.size-select, .slices-select, .quantity-input {
+.size-select, .slices-select, .quantity-input, .flavor-select {
     width: 100%;
     padding: 0.6rem;
     border: 2px solid var(--color-light);
@@ -922,14 +922,14 @@ h1, h2, h3, h4 {
     cursor: pointer;
 }
 
-.size-select:focus, .slices-select:focus, .quantity-input:focus {
+.size-select:focus, .slices-select:focus, .quantity-input:focus, .flavor-select:focus {
     outline: none;
     border-color: var(--color-dark);
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(166, 116, 70, 0.12);
 }
 
-.size-select:hover, .slices-select:hover, .quantity-input:hover {
+.size-select:hover, .slices-select:hover, .quantity-input:hover, .flavor-select:hover {
     border-color: var(--color-tan);
 }
 
